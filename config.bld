@@ -36,37 +36,34 @@
  */
 var Build = xdc.useModule('xdc.bld.BuildEnvironment');
 
-/*  Memory Map for ti.platforms.evmDRA7XX:ipu1
+/*  Memory Map for ti.platforms.sdp5430:ipu1
  *
  *  --- External Memory ---
- *  Virtual     Physical        Size            Comment
+ *  Virtual     Physical    Resource              Size            Comment
  *  ------------------------------------------------------------------------
- *  0000_4000   ????_????     F_C000  (  ~1 MB) EXT_CODE
- *  8000_0000   ????_????    20_0000  (   2 MB) EXT_DATA
- *  8020_0000   ????_????    30_0000  (   3 MB) EXT_HEAP
- *  9F00_0000   9F00_0000     6_0000  ( 384 kB) TRACE_BUF
- *  9F06_0000   9F06_0000     1_0000  (  64 kB) EXC_DATA
- *  9F07_0000   9F07_0000     2_0000  ( 128 kB) PM_DATA (Power mgmt)
+ *  0000_0000   5500_0000   IPU_MEM_TEXT           4000  (   4 kB) L2_ROM (not defined here)
+ *  0000_4000   ????_????   IPU_MEM_TEXT        5F_C000  (  ~6 MB) EXT_CODE
+ *  2000_0000   5502_0000   (no carveout)        1_0000  (  64 kb) L2_RAM (not defined here)
+ *  8000_0000   ????_????   IPU_MEM_DATA       300_0000  (  48 MB) EXT_DATA
+ *  9F00_0000   9F00_0000   IPU_MEM_IPC_DATA     6_0000  ( 180 kB) TRACE_BUF
+ *  9F06_0000   9F06_0000   IPU_MEM_IPC_DATA     1_0000  (  64 kB) EXC_DATA
+ *  9F07_0000   9F07_0000   IPU_MEM_IPC_DATA     2_0000  ( 128 kB) PM_DATA (Power mgmt)
+ *
+ * The L2_ROM and L2_RAM entries I believe are defined in
+ * bios_6_46_06_00/packages/ti/catalog/arm/cortexm4/OMAP5430.xdc
  */
-var evmDRA7XX_ExtMemMapIpu1 = {
+var evmOMAP543x_ExtMemMapIpu1 = {
     EXT_CODE: {
         name: "EXT_CODE",
         base: 0x00004000,
-        len:  0x000FC000,
+        len:  0x005FC000,
         space: "code",
         access: "RWX"
     },
     EXT_DATA: {
         name: "EXT_DATA",
         base: 0x80000000,
-        len:  0x00200000,
-        space: "data",
-        access: "RW"
-    },
-    EXT_HEAP: {
-        name: "EXT_HEAP",
-        base: 0x80200000,
-        len:  0x00300000,
+        len:  0x03000000,
         space: "data",
         access: "RW"
     },
@@ -95,12 +92,11 @@ var evmDRA7XX_ExtMemMapIpu1 = {
 
 Build.platformTable["ti.platforms.sdp5430:ipu1"] = {
     externalMemoryMap: [
-        [ "EXT_CODE", evmDRA7XX_ExtMemMapIpu1.EXT_CODE ],
-        [ "EXT_DATA", evmDRA7XX_ExtMemMapIpu1.EXT_DATA ],
-        [ "EXT_HEAP", evmDRA7XX_ExtMemMapIpu1.EXT_HEAP ],
-        [ "TRACE_BUF", evmDRA7XX_ExtMemMapIpu1.TRACE_BUF ],
-        [ "EXC_DATA", evmDRA7XX_ExtMemMapIpu1.EXC_DATA ],
-        [ "PM_DATA", evmDRA7XX_ExtMemMapIpu1.PM_DATA ]
+        [ "EXT_CODE", evmOMAP543x_ExtMemMapIpu1.EXT_CODE ],
+        [ "EXT_DATA", evmOMAP543x_ExtMemMapIpu1.EXT_DATA ],
+        [ "TRACE_BUF", evmOMAP543x_ExtMemMapIpu1.TRACE_BUF ],
+        [ "EXC_DATA", evmOMAP543x_ExtMemMapIpu1.EXC_DATA ],
+        [ "PM_DATA", evmOMAP543x_ExtMemMapIpu1.PM_DATA ]
     ],
     codeMemory: "EXT_CODE",
     dataMemory: "EXT_DATA",
