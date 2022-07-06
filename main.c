@@ -18,6 +18,8 @@ Void taskFxn(UArg a0, UArg a1)
     System_printf("enter taskFxn()\n");
 	
     Task_sleep(10);
+
+    System_printf("Hello world!\n");
 	
     System_printf("exit taskFxn()\n");
 }
